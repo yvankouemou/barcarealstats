@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  players_job:
+    build: ./players_job
+    container_name: football_players_job
+    env_file: .env
+    command: ["python", "Recup_joueurs.py"]
+    #volumes:
+    #  - ~/.config/gcloud:/root/.config/gcloud  # accès aux credentials GCP
+
+
