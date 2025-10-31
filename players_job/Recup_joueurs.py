@@ -31,7 +31,7 @@ def get_all_players(team_id):
 
         all_players.extend(players)
 
-        # Si on a atteint la dernière page, on sort
+        # Si on a atteint la dernière page, on sort de la boucle
         paging = data.get("paging", {})
         if paging.get("current") == paging.get("total"):
             break
@@ -40,26 +40,26 @@ def get_all_players(team_id):
 
     return all_players
 
-def save_to_json(players_data, filename="players.json"):
-    """Sauvegarde locale (optionnelle)"""
-    with open(filename, 'w', encoding='utf-8') as f:
-        json.dump(players_data, f, indent=2, ensure_ascii=False)
-    print(f"Données sauvegardées localement dans {filename}")
+# def save_to_json(players_data, filename="players.json"):
+#     """Sauvegarde locale (optionnelle)"""
+#     with open(filename, 'w', encoding='utf-8') as f:
+#         json.dump(players_data, f, indent=2, ensure_ascii=False)
+#     print(f"Données sauvegardées localement dans {filename}")
 
-# def insert_into_bigquery(data):
-#     """Insère les données brutes dans BigQuery."""
-#     if not data:
-#         print("Aucune donnée joueur à insérer.")
-#         return
+def insert_into_bigquery(data):
+     """Insère les données brutes dans BigQuery."""
+     if not data:
+         print("Aucune donnée joueur à insérer.")
+         return
 
-#     client = bigquery.Client()
-#     table_id = f"{client.project}.{DATASET}.{TABLE}"
+     client = bigquery.Client()
+     table_id = f"{client.project}.{DATASET}.{TABLE}"
 
-#     errors = client.insert_rows_json(table_id, data)
-#     if errors:
-#         print(f"Erreurs d'insertion BigQuery: {errors}")
-#     else:
-#         print(f"{len(data)} lignes insérées avec succès dans {table_id}.")
+     errors = client.insert_rows_json(table_id, data)
+     if errors:
+         print(f"Erreurs d'insertion BigQuery: {errors}")
+     else:
+         print(f"{len(data)} lignes insérées avec succès dans {table_id}.")
 
 
 def main():
@@ -74,18 +74,10 @@ def main():
         all_players_data.extend(players)
         print(f"{len(players)} joueurs récupérés pour l'équipe {team_id}")
 
-    # print(f"Total joueurs récupérés: {len(all_players_data)}")
-    # insert_into_bigquery(all_players_data)
+    print(f"Total joueurs récupérés: {len(all_players_data)}")
+    insert_into_bigquery(all_players_data)
 
 
 if __name__ == "__main__":
     main()
 
-
-    # def save_to_json(players_data, filename="players.json"):
-    # """Sauvegarde locale (optionnelle)"""
-    # with open(filename, 'w', encoding='utf-8') as f:
-    #     json.dump(players_data, f, indent=2, ensure_ascii=False)
-    # print(f"Données sauvegardées localement dans {filename}")
-
-    # save_to_json(players)

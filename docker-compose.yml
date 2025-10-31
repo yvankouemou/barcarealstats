@@ -5,7 +5,7 @@ services:
     container_name: football_players_job
     env_file: .env
     command: ["python", "Recup_joueurs.py"]
-    #volumes:
-    #  - ~/.config/gcloud:/root/.config/gcloud  # accès aux credentials GCP
+    volumes:
+      - ./credentials:/credentials
 
 
