@@ -37,3 +37,4 @@ def get_team_players(api_key, teams):
 # Utilisation
 API_KEY = "48383a3d0febd24e425c386fb0703b29"
 get_team_players(API_KEY, [529, 541])
+
