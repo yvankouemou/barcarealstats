@@ -1,0 +1,179 @@
+[
+  {"name": "league_id", "type": "INTEGER"},
+  {"name": "league_name", "type": "STRING"},
+  {"name": "league_country", "type": "STRING"},
+  {"name": "league_logo", "type": "STRING"},
+  {"name": "league_flag", "type": "STRING"},
+  {"name": "season", "type": "INTEGER"},
+
+  {"name": "team_id", "type": "INTEGER"},
+  {"name": "team_name", "type": "STRING"},
+  {"name": "team_logo", "type": "STRING"},
+
+  {"name": "form", "type": "STRING"},
+
+  {
+    "name": "fixtures",
+    "type": "RECORD",
+    "fields": [
+      {"name": "played", "type": "RECORD", "fields": [
+        {"name": "home", "type": "INTEGER"},
+        {"name": "away", "type": "INTEGER"},
+        {"name": "total", "type": "INTEGER"}
+      ]},
+      {"name": "wins", "type": "RECORD", "fields": [
+        {"name": "home", "type": "INTEGER"},
+        {"name": "away", "type": "INTEGER"},
+        {"name": "total", "type": "INTEGER"}
+      ]},
+      {"name": "draws", "type": "RECORD", "fields": [
+        {"name": "home", "type": "INTEGER"},
+        {"name": "away", "type": "INTEGER"},
+        {"name": "total", "type": "INTEGER"}
+      ]},
+      {"name": "loses", "type": "RECORD", "fields": [
+        {"name": "home", "type": "INTEGER"},
+        {"name": "away", "type": "INTEGER"},
+        {"name": "total", "type": "INTEGER"}
+      ]}
+    ]
+  },
+
+  {
+    "name": "goals",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "for",
+        "type": "RECORD",
+        "fields": [
+          {"name": "total", "type": "RECORD", "fields": [
+            {"name": "home", "type": "INTEGER"},
+            {"name": "away", "type": "INTEGER"},
+            {"name": "total", "type": "INTEGER"}
+          ]},
+          {"name": "average", "type": "RECORD", "fields": [
+            {"name": "home", "type": "FLOAT"},
+            {"name": "away", "type": "FLOAT"},
+            {"name": "total", "type": "FLOAT"}
+          ]},
+          {"name": "minute", "type": "RECORD", "mode": "REPEATED", "fields": [
+            {"name": "bucket", "type": "STRING"},
+            {"name": "total", "type": "INTEGER"},
+            {"name": "percentage", "type": "STRING"}
+          ]},
+          {"name": "under_over", "type": "RECORD", "mode": "REPEATED", "fields": [
+            {"name": "threshold", "type": "STRING"},
+            {"name": "over", "type": "INTEGER"},
+            {"name": "under", "type": "INTEGER"}
+          ]}
+        ]
+      },
+      {
+        "name": "against",
+        "type": "RECORD",
+        "fields": [
+          {"name": "total", "type": "RECORD", "fields": [
+            {"name": "home", "type": "INTEGER"},
+            {"name": "away", "type": "INTEGER"},
+            {"name": "total", "type": "INTEGER"}
+          ]},
+          {"name": "average", "type": "RECORD", "fields": [
+            {"name": "home", "type": "FLOAT"},
+            {"name": "away", "type": "FLOAT"},
+            {"name": "total", "type": "FLOAT"}
+          ]},
+          {"name": "minute", "type": "RECORD", "mode": "REPEATED", "fields": [
+            {"name": "bucket", "type": "STRING"},
+            {"name": "total", "type": "INTEGER"},
+            {"name": "percentage", "type": "STRING"}
+          ]},
+          {"name": "under_over", "type": "RECORD", "mode": "REPEATED", "fields": [
+            {"name": "threshold", "type": "STRING"},
+            {"name": "over", "type": "INTEGER"},
+            {"name": "under", "type": "INTEGER"}
+          ]}
+        ]
+      }
+    ]
+  },
+
+  {
+    "name": "biggest",
+    "type": "RECORD",
+    "fields": [
+      {"name": "streak", "type": "RECORD", "fields": [
+        {"name": "wins", "type": "INTEGER"},
+        {"name": "draws", "type": "INTEGER"},
+        {"name": "loses", "type": "INTEGER"}
+      ]},
+      {"name": "wins", "type": "RECORD", "fields": [
+        {"name": "home", "type": "STRING"},
+        {"name": "away", "type": "STRING"}
+      ]},
+      {"name": "loses", "type": "RECORD", "fields": [
+        {"name": "home", "type": "STRING"},
+        {"name": "away", "type": "STRING"}
+      ]},
+      {"name": "goals", "type": "RECORD", "fields": [
+        {"name": "for", "type": "RECORD", "fields": [
+          {"name": "home", "type": "INTEGER"},
+          {"name": "away", "type": "INTEGER"}
+        ]},
+        {"name": "against", "type": "RECORD", "fields": [
+          {"name": "home", "type": "INTEGER"},
+          {"name": "away", "type": "INTEGER"}
+        ]}
+      ]}
+    ]
+  },
+
+  {"name": "clean_sheet", "type": "RECORD", "fields": [
+    {"name": "home", "type": "INTEGER"},
+    {"name": "away", "type": "INTEGER"},
+    {"name": "total", "type": "INTEGER"}
+  ]},
+
+  {"name": "failed_to_score", "type": "RECORD", "fields": [
+    {"name": "home", "type": "INTEGER"},
+    {"name": "away", "type": "INTEGER"},
+    {"name": "total", "type": "INTEGER"}
+  ]},
+
+  {"name": "penalty", "type": "RECORD", "fields": [
+    {"name": "scored", "type": "RECORD", "fields": [
+      {"name": "total", "type": "INTEGER"},
+      {"name": "percentage", "type": "STRING"}
+    ]},
+    {"name": "missed", "type": "RECORD", "fields": [
+      {"name": "total", "type": "INTEGER"},
+      {"name": "percentage", "type": "STRING"}
+    ]},
+    {"name": "total", "type": "INTEGER"}
+  ]},
+
+  {"name": "lineups", "type": "RECORD", "mode": "REPEATED", "fields": [
+    {"name": "formation", "type": "STRING"},
+    {"name": "played", "type": "INTEGER"}
+  ]},
+
+  {"name": "cards", "type": "RECORD", "fields": [
+    {"name": "yellow", "type": "RECORD", "mode": "REPEATED", "fields": [
+      {"name": "bucket", "type": "STRING"},
+      {"name": "total", "type": "INTEGER"},
+      {"name": "percentage", "type": "STRING"}
+    ]},
+    {"name": "red", "type": "RECORD", "mode": "REPEATED", "fields": [
+      {"name": "bucket", "type": "STRING"},
+      {"name": "total", "type": "INTEGER"},
+      {"name": "percentage", "type": "STRING"}
+    ]}
+  ]},
+
+  {"name": "api_get", "type": "STRING"},
+  {"name": "api_results", "type": "INTEGER"},
+  {"name": "paging", "type": "RECORD", "fields": [
+    {"name": "current", "type": "INTEGER"},
+    {"name": "total", "type": "INTEGER"}
+  ]}
+]
