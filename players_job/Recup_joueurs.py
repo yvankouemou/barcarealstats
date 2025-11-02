@@ -68,7 +68,7 @@ def main():
     all_players_data = []
 
     for team_id in TEAM_IDS:
-        print(f"--- Équipe {team_id} ---")
+        print(f"Équipe {team_id}")
         players = get_all_players(team_id)
         #save_to_json(players)
         all_players_data.extend(players)

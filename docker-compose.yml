@@ -8,4 +8,10 @@ services:
     volumes:
       - ./credentials:/credentials
 
-
+  teams_job:
+    build: ./teams_job
+    container_name: football_teams_job
+    env_file: .env
+    command: ["python", "teams.py"]
+    volumes:
+      - ./credentials:/credentials
