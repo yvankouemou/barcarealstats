@@ -1,179 +1,421 @@
 [
-  {"name": "league_id", "type": "INTEGER"},
-  {"name": "league_name", "type": "STRING"},
-  {"name": "league_country", "type": "STRING"},
-  {"name": "league_logo", "type": "STRING"},
-  {"name": "league_flag", "type": "STRING"},
-  {"name": "season", "type": "INTEGER"},
+  { "name": "league_id", "type": "INTEGER", "mode": "REQUIRED" },
+  { "name": "team_id",   "type": "INTEGER", "mode": "REQUIRED" },
+  { "name": "season",    "type": "INTEGER", "mode": "REQUIRED" },
 
-  {"name": "team_id", "type": "INTEGER"},
-  {"name": "team_name", "type": "STRING"},
-  {"name": "team_logo", "type": "STRING"},
-
-  {"name": "form", "type": "STRING"},
-
+  { "name": "get",       "type": "STRING", "mode": "NULLABLE" },
   {
-    "name": "fixtures",
-    "type": "RECORD",
+    "name": "parameters", "type": "RECORD", "mode": "NULLABLE",
     "fields": [
-      {"name": "played", "type": "RECORD", "fields": [
-        {"name": "home", "type": "INTEGER"},
-        {"name": "away", "type": "INTEGER"},
-        {"name": "total", "type": "INTEGER"}
-      ]},
-      {"name": "wins", "type": "RECORD", "fields": [
-        {"name": "home", "type": "INTEGER"},
-        {"name": "away", "type": "INTEGER"},
-        {"name": "total", "type": "INTEGER"}
-      ]},
-      {"name": "draws", "type": "RECORD", "fields": [
-        {"name": "home", "type": "INTEGER"},
-        {"name": "away", "type": "INTEGER"},
-        {"name": "total", "type": "INTEGER"}
-      ]},
-      {"name": "loses", "type": "RECORD", "fields": [
-        {"name": "home", "type": "INTEGER"},
-        {"name": "away", "type": "INTEGER"},
-        {"name": "total", "type": "INTEGER"}
-      ]}
+      { "name": "season", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "team",   "type": "STRING", "mode": "NULLABLE" },
+      { "name": "league", "type": "STRING", "mode": "NULLABLE" }
+    ]
+  },
+  { "name": "errors",  "type": "STRING", "mode": "REPEATED" },
+  { "name": "results", "type": "INTEGER",  "mode": "NULLABLE" },
+  {
+    "name": "paging", "type": "RECORD", "mode": "NULLABLE",
+    "fields": [
+      { "name": "current", "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "total",   "type": "INTEGER", "mode": "NULLABLE" }
     ]
   },
 
   {
-    "name": "goals",
-    "type": "RECORD",
+    "name": "league", "type": "RECORD", "mode": "NULLABLE",
+    "fields": [
+      { "name": "id",      "type": "INTEGER",  "mode": "NULLABLE" },
+      { "name": "name",    "type": "STRING", "mode": "NULLABLE" },
+      { "name": "country", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "logo",    "type": "STRING", "mode": "NULLABLE" },
+      { "name": "flag",    "type": "STRING", "mode": "NULLABLE" },
+      { "name": "season",  "type": "INTEGER",  "mode": "NULLABLE" }
+    ]
+  },
+  {
+    "name": "team", "type": "RECORD", "mode": "NULLABLE",
+    "fields": [
+      { "name": "id",   "type": "INTEGER",  "mode": "NULLABLE" },
+      { "name": "name", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "logo", "type": "STRING", "mode": "NULLABLE" }
+    ]
+  },
+
+  { "name": "form", "type": "STRING", "mode": "NULLABLE" },
+
+  {
+    "name": "fixtures", "type": "RECORD", "mode": "NULLABLE",
     "fields": [
       {
-        "name": "for",
-        "type": "RECORD",
+        "name": "played", "type": "RECORD", "mode": "NULLABLE",
         "fields": [
-          {"name": "total", "type": "RECORD", "fields": [
-            {"name": "home", "type": "INTEGER"},
-            {"name": "away", "type": "INTEGER"},
-            {"name": "total", "type": "INTEGER"}
-          ]},
-          {"name": "average", "type": "RECORD", "fields": [
-            {"name": "home", "type": "FLOAT"},
-            {"name": "away", "type": "FLOAT"},
-            {"name": "total", "type": "FLOAT"}
-          ]},
-          {"name": "minute", "type": "RECORD", "mode": "REPEATED", "fields": [
-            {"name": "bucket", "type": "STRING"},
-            {"name": "total", "type": "INTEGER"},
-            {"name": "percentage", "type": "STRING"}
-          ]},
-          {"name": "under_over", "type": "RECORD", "mode": "REPEATED", "fields": [
-            {"name": "threshold", "type": "STRING"},
-            {"name": "over", "type": "INTEGER"},
-            {"name": "under", "type": "INTEGER"}
-          ]}
+          { "name": "home",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "away",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "total", "type": "INTEGER", "mode": "NULLABLE" }
         ]
       },
       {
-        "name": "against",
-        "type": "RECORD",
+        "name": "wins", "type": "RECORD", "mode": "NULLABLE",
         "fields": [
-          {"name": "total", "type": "RECORD", "fields": [
-            {"name": "home", "type": "INTEGER"},
-            {"name": "away", "type": "INTEGER"},
-            {"name": "total", "type": "INTEGER"}
-          ]},
-          {"name": "average", "type": "RECORD", "fields": [
-            {"name": "home", "type": "FLOAT"},
-            {"name": "away", "type": "FLOAT"},
-            {"name": "total", "type": "FLOAT"}
-          ]},
-          {"name": "minute", "type": "RECORD", "mode": "REPEATED", "fields": [
-            {"name": "bucket", "type": "STRING"},
-            {"name": "total", "type": "INTEGER"},
-            {"name": "percentage", "type": "STRING"}
-          ]},
-          {"name": "under_over", "type": "RECORD", "mode": "REPEATED", "fields": [
-            {"name": "threshold", "type": "STRING"},
-            {"name": "over", "type": "INTEGER"},
-            {"name": "under", "type": "INTEGER"}
-          ]}
+          { "name": "home",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "away",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "total", "type": "INTEGER", "mode": "NULLABLE" }
+        ]
+      },
+      {
+        "name": "draws", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          { "name": "home",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "away",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "total", "type": "INTEGER", "mode": "NULLABLE" }
+        ]
+      },
+      {
+        "name": "loses", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          { "name": "home",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "away",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "total", "type": "INTEGER", "mode": "NULLABLE" }
         ]
       }
     ]
   },
 
   {
-    "name": "biggest",
-    "type": "RECORD",
+    "name": "goals", "type": "RECORD", "mode": "NULLABLE",
     "fields": [
-      {"name": "streak", "type": "RECORD", "fields": [
-        {"name": "wins", "type": "INTEGER"},
-        {"name": "draws", "type": "INTEGER"},
-        {"name": "loses", "type": "INTEGER"}
+      {
+        "name": "for", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "total", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "home",  "type": "INTEGER", "mode": "NULLABLE" },
+              { "name": "away",  "type": "INTEGER", "mode": "NULLABLE" },
+              { "name": "total", "type": "INTEGER", "mode": "NULLABLE" }
+            ]
+          },
+          {
+            "name": "average", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "home",  "type": "FLOAT64", "mode": "NULLABLE" },
+              { "name": "away",  "type": "FLOAT64", "mode": "NULLABLE" },
+              { "name": "total", "type": "FLOAT64", "mode": "NULLABLE" }
+            ]
+          },
+          {
+            "name": "minute", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "m0_15",   "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m16_30",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m31_45",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m46_60",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m61_75",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m76_90",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m91_105", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m106_120","type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]}
+            ]
+          },
+          {
+            "name": "under_over", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "u0_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]},
+              { "name": "u1_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]},
+              { "name": "u2_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]},
+              { "name": "u3_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]},
+              { "name": "u4_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]}
+            ]
+          }
+        ]
+      },
+      {
+        "name": "against", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "total", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "home",  "type": "INTEGER", "mode": "NULLABLE" },
+              { "name": "away",  "type": "INTEGER", "mode": "NULLABLE" },
+              { "name": "total", "type": "INTEGER", "mode": "NULLABLE" }
+            ]
+          },
+          {
+            "name": "average", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "home",  "type": "FLOAT64", "mode": "NULLABLE" },
+              { "name": "away",  "type": "FLOAT64", "mode": "NULLABLE" },
+              { "name": "total", "type": "FLOAT64", "mode": "NULLABLE" }
+            ]
+          },
+          {
+            "name": "minute", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "m0_15",   "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m16_30",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m31_45",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m46_60",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m61_75",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m76_90",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m91_105", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]},
+              { "name": "m106_120","type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+                { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+              ]}
+            ]
+          },
+          {
+            "name": "under_over", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "u0_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]},
+              { "name": "u1_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]},
+              { "name": "u2_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]},
+              { "name": "u3_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]},
+              { "name": "u4_5", "type": "RECORD", "mode": "NULLABLE", "fields": [
+                { "name": "over",  "type": "INTEGER", "mode": "NULLABLE" },
+                { "name": "under", "type": "INTEGER", "mode": "NULLABLE" }
+              ]}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "name": "biggest", "type": "RECORD", "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "streak", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          { "name": "wins",  "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "draws", "type": "INTEGER", "mode": "NULLABLE" },
+          { "name": "loses", "type": "INTEGER", "mode": "NULLABLE" }
+        ]
+      },
+      {
+        "name": "wins", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          { "name": "home", "type": "STRING", "mode": "NULLABLE" },
+          { "name": "away", "type": "STRING", "mode": "NULLABLE" }
+        ]
+      },
+      {
+        "name": "loses", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          { "name": "home", "type": "STRING", "mode": "NULLABLE" },
+          { "name": "away", "type": "STRING", "mode": "NULLABLE" }
+        ]
+      },
+      {
+        "name": "goals", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "for", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "home", "type": "INTEGER", "mode": "NULLABLE" },
+              { "name": "away", "type": "INTEGER", "mode": "NULLABLE" }
+            ]
+          },
+          {
+            "name": "against", "type": "RECORD", "mode": "NULLABLE",
+            "fields": [
+              { "name": "home", "type": "INTEGER", "mode": "NULLABLE" },
+              { "name": "away", "type": "INTEGER", "mode": "NULLABLE" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  { "name": "clean_sheet",     "type": "RECORD", "mode": "NULLABLE",
+    "fields": [
+      { "name": "home",  "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "away",  "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "total", "type": "INTEGER", "mode": "NULLABLE" }
+    ]
+  },
+  { "name": "failed_to_score", "type": "RECORD", "mode": "NULLABLE",
+    "fields": [
+      { "name": "home",  "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "away",  "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "total", "type": "INTEGER", "mode": "NULLABLE" }
+    ]
+  },
+
+  {
+    "name": "penalty", "type": "RECORD", "mode": "NULLABLE",
+    "fields": [
+      { "name": "total", "type": "INTEGER", "mode": "NULLABLE" },
+      { "name": "scored", "type": "RECORD", "mode": "NULLABLE", "fields": [
+        { "name": "total",      "type": "INTEGER",  "mode": "NULLABLE" },
+        { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
       ]},
-      {"name": "wins", "type": "RECORD", "fields": [
-        {"name": "home", "type": "STRING"},
-        {"name": "away", "type": "STRING"}
-      ]},
-      {"name": "loses", "type": "RECORD", "fields": [
-        {"name": "home", "type": "STRING"},
-        {"name": "away", "type": "STRING"}
-      ]},
-      {"name": "goals", "type": "RECORD", "fields": [
-        {"name": "for", "type": "RECORD", "fields": [
-          {"name": "home", "type": "INTEGER"},
-          {"name": "away", "type": "INTEGER"}
-        ]},
-        {"name": "against", "type": "RECORD", "fields": [
-          {"name": "home", "type": "INTEGER"},
-          {"name": "away", "type": "INTEGER"}
-        ]}
+      { "name": "missed", "type": "RECORD", "mode": "NULLABLE", "fields": [
+        { "name": "total",      "type": "INTEGER",  "mode": "NULLABLE" },
+        { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
       ]}
     ]
   },
 
-  {"name": "clean_sheet", "type": "RECORD", "fields": [
-    {"name": "home", "type": "INTEGER"},
-    {"name": "away", "type": "INTEGER"},
-    {"name": "total", "type": "INTEGER"}
-  ]},
+  {
+    "name": "lineups", "type": "RECORD", "mode": "REPEATED",
+    "fields": [
+      { "name": "formation", "type": "STRING", "mode": "NULLABLE" },
+      { "name": "played",    "type": "INTEGER",  "mode": "NULLABLE" }
+    ]
+  },
 
-  {"name": "failed_to_score", "type": "RECORD", "fields": [
-    {"name": "home", "type": "INTEGER"},
-    {"name": "away", "type": "INTEGER"},
-    {"name": "total", "type": "INTEGER"}
-  ]},
-
-  {"name": "penalty", "type": "RECORD", "fields": [
-    {"name": "scored", "type": "RECORD", "fields": [
-      {"name": "total", "type": "INTEGER"},
-      {"name": "percentage", "type": "STRING"}
-    ]},
-    {"name": "missed", "type": "RECORD", "fields": [
-      {"name": "total", "type": "INTEGER"},
-      {"name": "percentage", "type": "STRING"}
-    ]},
-    {"name": "total", "type": "INTEGER"}
-  ]},
-
-  {"name": "lineups", "type": "RECORD", "mode": "REPEATED", "fields": [
-    {"name": "formation", "type": "STRING"},
-    {"name": "played", "type": "INTEGER"}
-  ]},
-
-  {"name": "cards", "type": "RECORD", "fields": [
-    {"name": "yellow", "type": "RECORD", "mode": "REPEATED", "fields": [
-      {"name": "bucket", "type": "STRING"},
-      {"name": "total", "type": "INTEGER"},
-      {"name": "percentage", "type": "STRING"}
-    ]},
-    {"name": "red", "type": "RECORD", "mode": "REPEATED", "fields": [
-      {"name": "bucket", "type": "STRING"},
-      {"name": "total", "type": "INTEGER"},
-      {"name": "percentage", "type": "STRING"}
-    ]}
-  ]},
-
-  {"name": "api_get", "type": "STRING"},
-  {"name": "api_results", "type": "INTEGER"},
-  {"name": "paging", "type": "RECORD", "fields": [
-    {"name": "current", "type": "INTEGER"},
-    {"name": "total", "type": "INTEGER"}
-  ]}
+  {
+    "name": "cards", "type": "RECORD", "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "yellow", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          { "name": "m0_15",   "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m16_30",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m31_45",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m46_60",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m61_75",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m76_90",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m91_105", "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m106_120","type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]}
+        ]
+      },
+      {
+        "name": "red", "type": "RECORD", "mode": "NULLABLE",
+        "fields": [
+          { "name": "m0_15",   "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m16_30",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m31_45",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m46_60",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m61_75",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m76_90",  "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m91_105", "type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]},
+          { "name": "m106_120","type": "RECORD", "mode": "NULLABLE", "fields": [
+            { "name": "total", "type": "INTEGER",  "mode": "NULLABLE" },
+            { "name": "percentage", "type": "STRING", "mode": "NULLABLE" }
+          ]}
+        ]
+      }
+    ]
+  }
 ]
