@@ -12,6 +12,48 @@ YEAR = 2021 #datetime.now().year
 DATASET = os.getenv("BQ_DATASET")
 TABLE = os.getenv("BQ_TEAMS_TABLE")
 
+#Equivalence des champs en chiffres de l'API avec les colonnes Bigquery
+KEY_MAPPING = {
+    "0-15": "m0_15",
+    "16-30": "m16_30",
+    "31-45": "m31_45",
+    "46-60": "m46_60",
+    "61-75": "m61_75",
+    "76-90": "m76_90",
+    "91-105": "m91_105",
+    "106-120": "m106_120",
+    "0.5": "u0_5",
+    "1.5": "u1_5",
+    "2.5": "u2_5",
+    "3.5": "u3_5",
+    "4.5": "u4_5",
+}
+
+def map_keys(obj):
+    """
+    Transforme récursivement les clés du JSON API en respectant
+    le mapping vers le schéma BigQuery.
+    """
+    if isinstance(obj, dict):
+        new_obj = {}
+        for k, v in obj.items():
+            new_key = KEY_MAPPING.get(k, k)  # remplace si présent dans le mapping
+            new_obj[new_key] = map_keys(v)
+        return new_obj
+    elif isinstance(obj, list):
+        return [map_keys(item) for item in obj]
+    else:
+        return obj
+    
+def save_to_json(team_stats, filename="teams_stats.json"):
+    """Sauvegarde locale des statistiques d'équipes dans un fichier JSON."""
+    try:
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(team_stats, f, indent=2, ensure_ascii=False)
+        print(f" Données sauvegardées localement dans {filename}")
+    except Exception as e:
+        print(f" Erreur lors de la sauvegarde dans {filename} : {e}")
+
 
 def get_team_statistics(team_id, league_id):
     """Récupère les statistiques d'une équipe pour une ligue donnée."""
@@ -27,7 +69,15 @@ def get_team_statistics(team_id, league_id):
         return None
 
     data = response.json()
-    return data.get("response")
+    raw_response = data.get("response")
+
+    if not raw_response:
+        return None
+    # Nettoyage du JSON avant retour
+    cleaned = map_keys(raw_response)
+    return cleaned
+
+
 
 
 def insert_into_bigquery(data):
@@ -64,6 +114,7 @@ def main():
     print(f"Total d'entrées récupérées : {len(all_team_stats)}")
 
     if all_team_stats:
+        save_to_json(all_team_stats, "teams_stats.json")
         insert_into_bigquery(all_team_stats)
 
 
