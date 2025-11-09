@@ -8,11 +8,11 @@ from google.cloud import bigquery
 API_KEY = os.getenv("FOOTBALL_API_KEY")
 TEAM_IDS = os.getenv("TEAM_IDS", "").split(",")
 LEAGUE_IDS = os.getenv("LEAGUE_IDS", "").split(",")
-YEAR = 2021 #datetime.now().year
+YEAR = 2021  # datetime.now().year
 DATASET = os.getenv("BQ_DATASET")
 TABLE = os.getenv("BQ_TEAMS_TABLE")
 
-#Equivalence des champs en chiffres de l'API avec les colonnes Bigquery
+# Equivalence des champs API → BigQuery
 KEY_MAPPING = {
     "0-15": "m0_15",
     "16-30": "m16_30",
@@ -31,20 +31,47 @@ KEY_MAPPING = {
 
 def map_keys(obj):
     """
-    Transforme récursivement les clés du JSON API en respectant
-    le mapping vers le schéma BigQuery.
+    Transforme récursivement les clés du JSON API.
+    - applique KEY_MAPPING
+    - convertit '-' et '.' en '_'
+    - supprime les clés invalides ou inconnues
+    - supprime les clés qui ne correspondent pas au schéma BigQuery
     """
     if isinstance(obj, dict):
         new_obj = {}
+
         for k, v in obj.items():
-            new_key = KEY_MAPPING.get(k, k)  # remplace si présent dans le mapping
+
+            # Ignorer les clés illégales
+            if k is None or k.strip() == "" or k.strip() in [".", "_"]:
+                continue
+
+            # Mapping direct API → BQ
+            if k in KEY_MAPPING:
+                new_key = KEY_MAPPING[k]
+            else:
+                # Nettoyage de base
+                new_key = (
+                    k.replace("-", "_")
+                     .replace(".", "_")
+                     .strip()
+                )
+
+                # Si après nettoyage la clé est vide ou non alphanumérique → on ignore
+                if new_key == "" or not new_key.replace("_", "").isalnum():
+                    continue
+
+            # Application récursive
             new_obj[new_key] = map_keys(v)
+
         return new_obj
+
     elif isinstance(obj, list):
         return [map_keys(item) for item in obj]
-    else:
-        return obj
-    
+
+    return obj
+
+
 def save_to_json(team_stats, filename="teams_stats.json"):
     """Sauvegarde locale des statistiques d'équipes dans un fichier JSON."""
     try:
@@ -65,7 +92,9 @@ def get_team_statistics(team_id, league_id):
 
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
-        print(f"Erreur récupération stats équipe {team_id}, ligue {league_id}: {response.text}")
+        print(
+            f"Erreur récupération stats équipe {team_id}, ligue {league_id}: {response.text}"
+        )
         return None
 
     data = response.json()
@@ -73,11 +102,10 @@ def get_team_statistics(team_id, league_id):
 
     if not raw_response:
         return None
+
     # Nettoyage du JSON avant retour
     cleaned = map_keys(raw_response)
     return cleaned
-
-
 
 
 def insert_into_bigquery(data):
