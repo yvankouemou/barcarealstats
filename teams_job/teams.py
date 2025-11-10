@@ -31,11 +31,8 @@ KEY_MAPPING = {
 
 def map_keys(obj):
     """
-    Transforme récursivement les clés du JSON API.
-    - applique KEY_MAPPING
-    - convertit '-' et '.' en '_'
-    - supprime les clés invalides ou inconnues
-    - supprime les clés qui ne correspondent pas au schéma BigQuery
+    Transforme récursivement les clés du JSON API via KEY_MAPPING
+    et supprime les clés qui ne correspondent pas au schéma BigQuery
     """
     if isinstance(obj, dict):
         new_obj = {}
@@ -46,11 +43,10 @@ def map_keys(obj):
             if k is None or k.strip() == "" or k.strip() in [".", "_"]:
                 continue
 
-            # Mapping direct API → BQ
+            # Mapping direct des données à la structure Bigquery
             if k in KEY_MAPPING:
                 new_key = KEY_MAPPING[k]
             else:
-                # Nettoyage de base
                 new_key = (
                     k.replace("-", "_")
                      .replace(".", "_")
@@ -72,14 +68,14 @@ def map_keys(obj):
     return obj
 
 
-def save_to_json(team_stats, filename="teams_stats.json"):
-    """Sauvegarde locale des statistiques d'équipes dans un fichier JSON."""
-    try:
-        with open(filename, "w", encoding="utf-8") as f:
-            json.dump(team_stats, f, indent=2, ensure_ascii=False)
-        print(f" Données sauvegardées localement dans {filename}")
-    except Exception as e:
-        print(f" Erreur lors de la sauvegarde dans {filename} : {e}")
+# def save_to_json(team_stats, filename="teams_stats.json"):
+#     """Sauvegarde locale des statistiques d'équipes dans un fichier JSON."""
+#     try:
+#         with open(filename, "w", encoding="utf-8") as f:
+#             json.dump(team_stats, f, indent=2, ensure_ascii=False)
+#         print(f" Données sauvegardées localement dans {filename}")
+#     except Exception as e:
+#         print(f" Erreur lors de la sauvegarde dans {filename} : {e}")
 
 
 def get_team_statistics(team_id, league_id):
@@ -107,7 +103,14 @@ def get_team_statistics(team_id, league_id):
     cleaned = map_keys(raw_response)
     return cleaned
 
+# Vider la table avant ingestion
+def truncate_bigquery_table():
+    client = bigquery.Client()
+    query = f"TRUNCATE TABLE `{DATASET}.{TABLE}`"
+    client.query(query).result()
+    print(f"Table {TABLE} vidée avant réinsertion.")
 
+#Insertion des données dans Bigquery
 def insert_into_bigquery(data):
     """Insère les données brutes dans BigQuery."""
     if not data:
@@ -142,7 +145,8 @@ def main():
     print(f"Total d'entrées récupérées : {len(all_team_stats)}")
 
     if all_team_stats:
-        save_to_json(all_team_stats, "teams_stats.json")
+        #save_to_json(all_team_stats, "teams_stats.json")
+        truncate_bigquery_table()
         insert_into_bigquery(all_team_stats)
 
 

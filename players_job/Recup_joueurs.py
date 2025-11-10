@@ -46,6 +46,13 @@ def get_all_players(team_id):
 #         json.dump(players_data, f, indent=2, ensure_ascii=False)
 #     print(f"Données sauvegardées localement dans {filename}")
 
+# Vider la table avant ingestion
+def truncate_bigquery_table():
+    client = bigquery.Client()
+    query = f"TRUNCATE TABLE `{DATASET}.{TABLE}`"
+    client.query(query).result()
+    print(f"Table {TABLE} vidée avant réinsertion.")
+
 def insert_into_bigquery(data):
      """Insère les données brutes dans BigQuery."""
      if not data:
@@ -75,7 +82,9 @@ def main():
         print(f"{len(players)} joueurs récupérés pour l'équipe {team_id}")
 
     print(f"Total joueurs récupérés: {len(all_players_data)}")
-    insert_into_bigquery(all_players_data)
+    if all_players_data:
+        truncate_bigquery_table()
+        insert_into_bigquery(all_players_data)
 
 
 if __name__ == "__main__":
