@@ -6,7 +6,7 @@ from google.cloud import bigquery
 
 API_KEY = os.getenv("FOOTBALL_API_KEY")
 TEAM_IDS = os.getenv("TEAM_IDS", "").split(",")  # utilise la virgule pour séparer les équipes
-YEAR = 2021 #datetime.now().year
+YEAR = datetime.now().year
 DATASET = os.getenv("BQ_DATASET")
 TABLE = os.getenv("BQ_PLAYERS_TABLE")
 
