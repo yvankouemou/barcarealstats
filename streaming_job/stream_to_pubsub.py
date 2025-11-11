@@ -1,101 +1,159 @@
 import os
-import time
 import json
-import random
+import time
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from google.cloud import pubsub_v1
 
 
+API_BASE = os.getenv("API_URL")
+API_KEY = os.getenv("FOOTBALL_API_KEY")
+TEAM_IDS = os.getenv("TEAM_IDS", "").split(",")
+POLL_DEFAULT = 1800  # 30 min(hors match)
+SEASON = datetime.now().year
 
-API_TIMEOUT = int(os.getenv("API_TIMEOUT"))
-POLL_INTERVAL_LIVE = int(os.getenv("POLL_INTERVAL_LIVE"))   # pendant un match
-POLL_INTERVAL_IDLE = int(os.getenv("POLL_INTERVAL_IDLE")) # pas de match → 1h
-# ENV
-api_base = os.getenv("API_URL")
-api_key = os.getenv("FOOTBALL_API_KEY")
-topic_id = os.getenv("PUBSUB_TOPIC")
-project_id = os.getenv("GCP_PROJECT")
-team_ids = os.getenv("TEAM_IDS", "").split(",")
+PROJECT_ID = os.getenv("GCP_PROJECT")
+TOPIC_ID = os.getenv("PUBSUB_TOPIC")
 
+# API 
+def api_get(endpoint, params=None, timeout=15, retries=3, backoff=2):
+    headers = {"x-apisports-key": API_KEY}
+    url = f"{API_BASE}{endpoint}"
 
-def get_fixtures_in_progress(api_base, api_key, team_ids):
-    """Retourne la liste des fixtures en cours pour les équipes spécifiées."""
-    headers = {"x-apisports-key": api_key}
-    team_params = "&".join([f"team={tid}" for tid in team_ids])
+    for attempt in range(retries):
+        try:
+            resp = requests.get(url, params=params, headers=headers, timeout=timeout)
+            resp.raise_for_status()
+            return resp.json()
+        except Exception as e:
+            print(f" Error: API call failed (attempt {attempt+1}/{retries}): {e}")
+            time.sleep(backoff)
 
-    url = f"{api_base}fixtures?live=all&{team_params}"
+    print(" Fatal Error: API unreachable after retries.")
+    return None
 
-    try:
-        response = requests.get(url, headers=headers, timeout=API_TIMEOUT)
-        response.raise_for_status()
-        data = response.json()
-        return data.get("response", [])
-    except Exception as e:
-        print(f"[ERROR] get_fixtures_in_progress → {e}")
+# FETCH NEXT MATCH FOR A TEAM
+
+def get_next_fixture(team_id):
+    params = {"team": team_id, "season": SEASON}
+    data = api_get("fixtures", params=params)
+
+    if not data or "response" not in data:
+        return None
+
+    upcoming = []
+
+    for fixture in data["response"]:
+        date_str = fixture["fixture"]["date"]
+        start_time = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+
+        if start_time > datetime.now(timezone.utc):
+            upcoming.append(start_time)
+
+    return min(upcoming) if upcoming else None
+
+# GET FIXTURES IN PROGRESS
+def get_live_fixtures():
+    data = api_get("fixtures", params={"live": "all"})
+    if not data or "response" not in data:
         return []
 
+    live = []
 
-def get_fixture_events(api_base, api_key, fixture_id):
-    """Récupère les événements d'un match."""
-    headers = {"x-apisports-key": api_key}
-    url = f"{api_base}fixtures/events?fixture={fixture_id}"
+    for fixture in data["response"]:
+        team_ids = [
+            fixture["teams"]["home"]["id"],
+            fixture["teams"]["away"]["id"]
+        ]
+        if any(str(tid) in TEAM_IDS for tid in team_ids):
+            live.append(fixture)
 
-    try:
-        r = requests.get(url, headers=headers, timeout=API_TIMEOUT)
-        r.raise_for_status()
-        return r.json().get("response", [])
-    except Exception as e:
-        print(f"[ERROR] get_fixture_events → fixture={fixture_id} → {e}")
-        return []
+    return live
 
-
-def publish_to_pubsub(publisher, topic_path, message_dict):
-    """Publication avec validation & sérialisation JSON."""
-    try:
-        data = json.dumps(message_dict).encode("utf-8")
-        future = publisher.publish(topic_path, data)
-        future.result(timeout=8)
-        print(f"[PUB] {message_dict['fixture_id']} event sent.")
-    except Exception as e:
-        print(f"[ERROR] publish_to_pubsub → {e}")
+# FETCH EVENTS FOR A FIXTURE
+def get_fixture_events(fixture_id):
+    return api_get("fixtures/events", params={"fixture": fixture_id})
 
 
-def start_stream():
+
+# DETERMINE POLLING INTERVAL BASED ON NEXT MATCH TIME
+
+def compute_poll_interval(next_match):
+    now = datetime.now(timezone.utc)
+
+    if not next_match:
+        return 1800  # 30 minutes
+
+    delta = next_match - now
+    minutes = delta.total_seconds() / 60
+
+    if minutes > 720:      # > 12h
+        return 1800        # 30 min
+    elif 60 < minutes <= 720:
+        return 300         # 5 min
+    elif 15 < minutes <= 60:
+        return 60          # 1 min
+    elif 0 < minutes <= 15:
+        return 30          # 30 sec
+    elif minutes <= 0:
+        return 15          # live mode
+
+    return 1800
+
+
+#PUBLISH RAW DATA TO PUBSUB
+def pubsub_setup():
     publisher = pubsub_v1.PublisherClient()
-    topic_path = publisher.topic_path(project_id, topic_id)
+    topic_path = publisher.topic_path(PROJECT_ID, TOPIC_ID)
+    return publisher, topic_path
 
-    print("✅ Service real-time events démarré.")
+
+def publish_raw_event(publisher, topic_path, payload):
+    publisher.publish(topic_path, json.dumps(payload).encode("utf-8"))
+    print("✅ Published event.")
+
+
+def main():
+    print("Service real-time events démarré.")
+
+    publisher, topic_path = pubsub_setup()
 
     while True:
-        fixtures_live = get_fixtures_in_progress(api_base, api_key, team_ids)
+        print("\n Checking match status...")
 
-        if not fixtures_live:
-            print("⏳ Aucun match en cours. Prochain scan dans 1 heure.")
-            time.sleep(POLL_INTERVAL_IDLE)
+        # Check live matches
+        live_fixtures = get_live_fixtures()
+
+        if live_fixtures:
+            print(" Match en cours ! Polling toutes les 15 sec.")
+
+            for fixture in live_fixtures:
+                fid = fixture["fixture"]["id"]
+                events = get_fixture_events(fid)
+
+                if events:
+                    publish_raw_event(publisher, topic_path, events)
+
+            time.sleep(15)
             continue
 
-        print(f"⚽ {len(fixtures_live)} match(s) en cours détectés.")
+        # No live match → check next fixtures
+        next_matches = [get_next_fixture(t) for t in TEAM_IDS]
+        next_matches = [m for m in next_matches if m]
 
-        for fixture in fixtures_live:
-            fixture_id = fixture["fixture"]["id"]
-            league = fixture["league"]["name"]
+        if not next_matches:
+            print("Aucun match international trouvé. Sleep 30 min.")
+            time.sleep(1800)
+            continue
 
-            events = get_fixture_events(api_base, api_key, fixture_id)
+        next_match = min(next_matches)
+        poll_interval = compute_poll_interval(next_match)
 
-            #for ev in events:
-            message = {
-                "fixture_id": fixture_id,
-                "league": league,
-                "timestamp": datetime.utcnow().isoformat(),
-                "event": events
-            }
-            publish_to_pubsub(publisher, topic_path, message)
+        print(f" Prochain match : {next_match}")
+        print(f" Prochain appel dans {poll_interval} sec.")
 
-        sleep_time = POLL_INTERVAL_LIVE + random.randint(0, 5)
-        print(f"⏳ Attente {sleep_time}s avant la prochaine lecture…")
-        time.sleep(sleep_time)
+        time.sleep(poll_interval)
 
 
 if __name__ == "__main__":
-    start_stream()
+    main()
