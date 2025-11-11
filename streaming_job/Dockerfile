@@ -5,6 +5,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY teams.py .
+COPY stream_to_pubsub.py .
 
-CMD ["python", "teams.py"]
+ENV PYTHONUNBUFFERED=1
+
+CMD ["python", "stream_to_pubsub.py"]
