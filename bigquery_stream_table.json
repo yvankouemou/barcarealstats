@@ -1,0 +1,141 @@
+[
+  {
+    "name": "get",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "parameters",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "fixture",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "errors",
+    "type": "STRING",
+    "mode": "REPEATED"
+  },
+  {
+    "name": "results",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "paging",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "current",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "total",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "response",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "time",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "elapsed",
+            "type": "INTEGER",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "extra",
+            "type": "INTEGER",
+            "mode": "NULLABLE"
+          }
+        ]
+      },
+      {
+        "name": "team",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "name",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "logo",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      },
+      {
+        "name": "player",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "name",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      },
+      {
+        "name": "assist",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "name",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      },
+      {
+        "name": "type",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "detail",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "comments",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  }
+]
