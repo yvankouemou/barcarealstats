@@ -8,7 +8,7 @@ from google.cloud import bigquery
 API_KEY = os.getenv("FOOTBALL_API_KEY")
 TEAM_IDS = os.getenv("TEAM_IDS", "").split(",")
 LEAGUE_IDS = os.getenv("LEAGUE_IDS", "").split(",")
-YEAR =datetime.now().year
+YEAR = datetime.now().year
 DATASET = os.getenv("BQ_DATASET")
 TABLE = os.getenv("BQ_TEAMS_TABLE")
 
