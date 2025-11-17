@@ -26,10 +26,10 @@ def api_get(endpoint, params=None, timeout=15, retries=3, backoff=2):
             resp.raise_for_status()
             return resp.json()
         except Exception as e:
-            print(f" Error: API call failed (attempt {attempt+1}/{retries}): {e}")
+            print(f" Erreur : l’appel API a échoué (tentative {attempt+1}/{retries}): {e}")
             time.sleep(backoff)
 
-    print(" Fatal Error: API unreachable after retries.")
+    print(" Erreur fatale : API inaccessible après plusieurs tentatives.")
     return None
 
 # FETCH NEXT MATCH FOR A TEAM
@@ -73,7 +73,7 @@ def get_live_fixtures():
 # FETCH EVENTS FOR A FIXTURE
 def get_fixture_events(fixture_id):
     return api_get("fixtures/events", params={"fixture": fixture_id})
-
+ 
 
 
 # DETERMINE POLLING INTERVAL BASED ON NEXT MATCH TIME
@@ -110,7 +110,7 @@ def pubsub_setup():
 
 def publish_raw_event(publisher, topic_path, payload):
     publisher.publish(topic_path, json.dumps(payload).encode("utf-8"))
-    print("✅ Published event.")
+    print(" Evénement publié.")
 
 
 def main():
@@ -119,7 +119,7 @@ def main():
     publisher, topic_path = pubsub_setup()
 
     while True:
-        print("\n Checking match status...")
+        print("\n Verification du statut du match...")
 
         # Check live matches
         live_fixtures = get_live_fixtures()
