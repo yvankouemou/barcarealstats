@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  players_job:
+    build: ./players_job
+    container_name: football_players_job
+    env_file: .env
+    command: ["python", "Recup_joueurs.py"]
+    volumes:
+      - ./credentials:/credentials
+
+  teams_job:
+    build: ./teams_job
+    container_name: football_teams_job
+    env_file: .env
+    command: ["python", "teams.py"]
+    volumes:
+      - ./credentials:/credentials
+  stream_events_job:
+    build: ./streaming_job
+    container_name: football_stream_events_job
+    env_file: .env
+    command: ["python", "stream_to_pubsub.py"]
+    volumes:
+      - ./credentials:/credentials
+    restart: unless-stopped
