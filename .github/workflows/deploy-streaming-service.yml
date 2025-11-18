@@ -1,0 +1,41 @@
+name: Deploy Streaming Service
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "streaming_job/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      #Authentification Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Authenticate Docker to Artifact Registry
+        run: |
+          gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+      - name: Build Docker Image
+        run: |
+          docker build -t europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest ./streaming_job
+
+      - name: Push Image to Artifact Registry
+        run: |
+          docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest
+
+      - name: Deploy to Cloud Run SERVICE
+        run: |
+          gcloud run deploy streaming-service \
+            --image europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest \
+            --region europe-west1 \
+            --quiet
