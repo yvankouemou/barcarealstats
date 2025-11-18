@@ -11,8 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Debug → valide l’ID du projet (mais masqué)
       - name: Debug project id
         run: echo "PROJECT_ID = ${{ secrets.PROJECT_ID }}"
+
       - name: Checkout source
         uses: actions/checkout@v3
 
@@ -27,7 +29,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.PROJECT_ID }}
-          export_default_credentials: true
 
       # Docker login to Artifact Registry
       - name: Authenticate Docker
