@@ -142,7 +142,7 @@ def main():
         next_matches = [m for m in next_matches if m]
 
         if not next_matches:
-            print("Aucun match international trouvé. Sleep 30 min.")
+            print("Aucun match international trouvé. Nouvelle vérification dans 30 min")
             time.sleep(1800)
             continue
 
