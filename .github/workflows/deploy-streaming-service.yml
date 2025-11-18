@@ -23,19 +23,19 @@ jobs:
 
       - name: Authenticate Docker to Artifact Registry
         run: |
-          gcloud auth configure-docker europe-west1-docker.pkg.dev
+          gcloud auth configure-docker europe-west9-docker.pkg.dev
 
       - name: Build Docker Image
         run: |
-          docker build -t europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest ./streaming_job
+          docker build -t europe-west9-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest ./streaming_job
 
       - name: Push Image to Artifact Registry
         run: |
-          docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest
+          docker push europe-west9-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest
 
       - name: Deploy to Cloud Run SERVICE
         run: |
           gcloud run deploy streaming-service \
-            --image europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest \
-            --region europe-west1 \
+            --image europe-west9-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest \
+            --region europe-west9 \
             --quiet
