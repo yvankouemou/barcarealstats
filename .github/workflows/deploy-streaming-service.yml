@@ -13,29 +13,38 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-      #Authentification Google Cloud
+
+      # Authenticate to Google Cloud
       - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # Install Google Cloud SDK
+      - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
+          project_id: ${{ secrets.PROJECT_ID }}
 
-      - name: Authenticate Docker to Artifact Registry
+      # Docker login to Artifact Registry
+      - name: Authenticate Docker
         run: |
-          gcloud auth configure-docker europe-west9-docker.pkg.dev
+          gcloud auth configure-docker europe-west9-docker.pkg.dev --quiet
 
-      - name: Build Docker Image
+      # Build image
+      - name: Build Docker image
         run: |
-          docker build -t europe-west9-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest ./streaming_job
+          docker build -t europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/containers/streaming-service:latest ./streaming_job
 
-      - name: Push Image to Artifact Registry
+      # Push image
+      - name: Push Docker image
         run: |
-          docker push europe-west9-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest
+          docker push europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/containers/streaming-service:latest
 
-      - name: Deploy to Cloud Run SERVICE
+      # Deploy to Cloud Run
+      - name: Deploy to Cloud Run
         run: |
           gcloud run deploy streaming-service \
-            --image europe-west9-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/containers/streaming-service:latest \
+            --image europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/containers/streaming-service:latest \
             --region europe-west9 \
             --quiet
