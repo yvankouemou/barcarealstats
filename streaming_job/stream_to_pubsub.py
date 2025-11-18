@@ -137,7 +137,7 @@ def main():
             time.sleep(15)
             continue
 
-        # Pas de match en line: on check la prochaine fixtures
+        # Pas de match en line : alors on check la prochaine fixtures
         next_matches = [get_next_fixture(t) for t in TEAM_IDS]
         next_matches = [m for m in next_matches if m]
 
