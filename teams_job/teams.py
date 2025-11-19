@@ -32,7 +32,7 @@ KEY_MAPPING = {
 def map_keys(obj):
     """
     Transforme récursivement les clés du JSON API via KEY_MAPPING
-    et supprime les clés qui ne correspondent pas au schéma BigQuery
+    et supprime les clés qui ne correspondent pas au schéma attendu par BigQuery
     """
     if isinstance(obj, dict):
         new_obj = {}
