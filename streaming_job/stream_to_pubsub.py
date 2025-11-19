@@ -15,7 +15,7 @@ SEASON = datetime.now().year
 PROJECT_ID = os.getenv("GCP_PROJECT")
 TOPIC_ID = os.getenv("PUBSUB_TOPIC")
 
-# API 
+# Appel API 
 def api_get(endpoint, params=None, timeout=15, retries=3, backoff=2):
     headers = {"x-apisports-key": API_KEY}
     url = f"{API_BASE}{endpoint}"
@@ -32,7 +32,7 @@ def api_get(endpoint, params=None, timeout=15, retries=3, backoff=2):
     print(" Erreur fatale : API inaccessible après plusieurs tentatives.")
     return None
 
-# FETCH NEXT MATCH FOR A TEAM
+# Récupérer le prochain match de l'équipe
 
 def get_next_fixture(team_id):
     params = {"team": team_id, "season": SEASON}
@@ -114,7 +114,7 @@ def publish_raw_event(publisher, topic_path, payload):
 
 
 def main():
-    print("Service real-time events démarré.")
+    print("Service Evénement temps réel démarré.")
 
     publisher, topic_path = pubsub_setup()
 
