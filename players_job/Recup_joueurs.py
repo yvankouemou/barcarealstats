@@ -77,7 +77,7 @@ def main():
     for team_id in TEAM_IDS:
         print(f"Équipe {team_id}")
         players = get_all_players(team_id)
-        #save_to_json(players)
+        #save_to_json(players) ok
         all_players_data.extend(players)
         print(f"{len(players)} joueurs récupérés pour l'équipe {team_id}")
 
