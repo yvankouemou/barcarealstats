@@ -114,7 +114,7 @@ def publish_raw_event(publisher, topic_path, payload):
 
 
 def main():
-    print("Service Evénement temps réel démarré.")
+    print("Service d'événement temps réel démarré.")
 
     publisher, topic_path = pubsub_setup()
 

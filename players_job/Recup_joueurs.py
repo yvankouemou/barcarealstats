@@ -64,7 +64,7 @@ def insert_into_bigquery(data):
 
      errors = client.insert_rows_json(table_id, data)
      if errors:
-         print(f"Erreurs d'insertion BigQuery: {errors}")
+         print(f"Erreurs d'insertion dans BigQuery: {errors}")
      else:
          print(f"{len(data)} lignes insérées avec succès dans {table_id}.")
 
