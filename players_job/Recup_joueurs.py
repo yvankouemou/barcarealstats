@@ -44,7 +44,7 @@ def get_all_players(team_id):
 #     """Sauvegarde locale (optionnelle)"""
 #     with open(filename, 'w', encoding='utf-8') as f:
 #         json.dump(players_data, f, indent=2, ensure_ascii=False)
-#     print(f"Données sauvegardées localement dans {filename}")
+#     print(f" Les données sont  sauvegardées localement dans {filename}")
 
 # Vider la table avant ingestion
 def truncate_bigquery_table():
