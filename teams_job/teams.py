@@ -110,7 +110,7 @@ def truncate_bigquery_table():
     client.query(query).result()
     print(f"Table {TABLE} vidée avant réinsertion.")
 
-#Insertion des données dans Bigquery
+#Insertion des données dans la table Bigquery
 def insert_into_bigquery(data):
     """Insère les données brutes dans BigQuery."""
     if not data:
