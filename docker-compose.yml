@@ -15,11 +15,13 @@ services:
     command: ["python", "teams.py"]
     volumes:
       - ./credentials:/credentials
-  stream_events_job:
+  stream_events_service:
     build: ./streaming_job
-    container_name: football_stream_events_job
+    container_name: football_stream_events_service
     env_file: .env
-    command: ["python", "stream_to_pubsub.py"]
+    command: ["uvicorn", "stream_to_pubsub:app", "--host", "0.0.0.0", "--port", "8080"]
+    ports:
+      - "8080:8080"
     volumes:
       - ./credentials:/credentials
     restart: unless-stopped
