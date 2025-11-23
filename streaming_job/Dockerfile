@@ -10,3 +10,4 @@ COPY stream_to_pubsub.py .
 ENV PYTHONUNBUFFERED=1
 
 CMD ["python", "stream_to_pubsub.py"]
+
