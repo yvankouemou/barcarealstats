@@ -1,0 +1,29 @@
+version: 2
+
+sources:
+  - name: football_data_test
+    tables:
+      - name: api_stream_stats
+      - name: api_players_stats
+
+models:
+  - name: api_stream_stats_clean
+    description: "Stream data after removing get, parameters.fixture, errors, results, paging.current, paging.total"
+    columns:
+      - name: response
+        description: "Main response array from the API"
+        data_tests:
+          - not_null
+
+  - name: api_players_stats_clean
+    description: "Player data after removing firstname and lastname"
+    columns:
+      - name: player.id
+        description: "Primary key for each player"
+        data_tests:
+          - unique
+          - not_null
+      - name: player.name
+        description: "Full name of the player"
+        data_tests:
+          - not_null

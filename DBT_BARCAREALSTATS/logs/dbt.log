@@ -1,0 +1,89 @@
+[0m17:17:53.761642 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001FF06D34C20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001FF077D11D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001FF07E43ED0>]}
+
+
+============================== 17:17:53.766695 | 0c41be8c-f642-449e-adfd-aca0cb5f7d56 ==============================
+[0m17:17:53.766695 [info ] [MainThread]: Running with dbt=1.10.15
+[0m17:17:53.767468 [debug] [MainThread]: running dbt with arguments {'no_print': 'None', 'invocation_command': 'dbt init dbt_brs', 'cache_selected_only': 'False', 'target_path': 'None', 'log_format': 'default', 'warn_error': 'None', 'log_path': 'logs', 'fail_fast': 'False', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True', 'partial_parse': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'indirect_selection': 'eager', 'use_experimental_parser': 'False', 'version_check': 'True', 'quiet': 'False', 'introspect': 'True', 'empty': 'None', 'log_cache_events': 'False', 'debug': 'False', 'profiles_dir': 'C:\\Users\\yvank\\.dbt', 'use_colors': 'True', 'printer_width': '80', 'write_json': 'True'}
+[0m17:17:53.802689 [debug] [MainThread]: Starter project path: C:\Users\yvank\AppData\Local\Programs\Python\Python313\Lib\site-packages\dbt\include\starter_project
+[0m17:17:53.818102 [info ] [MainThread]: 
+Your new dbt project "dbt_brs" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m17:17:53.819021 [info ] [MainThread]: Setting up your profile.
+[0m17:24:30.805211 [info ] [MainThread]: Profile dbt_brs written to C:\Users\yvank\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m17:24:30.809260 [debug] [MainThread]: Command `dbt init` succeeded at 17:24:30.808693 after 397.27 seconds
+[0m17:24:30.810824 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001FF26E190F0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001FF26DF5FD0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001FF26D62E00>]}
+[0m17:24:30.812825 [debug] [MainThread]: Flushing usage events
+[0m17:24:31.593719 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m17:25:27.277288 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017F1BB84C20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017F1C6211D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017F1CC93ED0>]}
+
+
+============================== 17:25:27.282144 | 33c6aab8-2f47-470e-a402-80cd05383482 ==============================
+[0m17:25:27.282144 [info ] [MainThread]: Running with dbt=1.10.15
+[0m17:25:27.282899 [debug] [MainThread]: running dbt with arguments {'profiles_dir': 'C:\\Users\\yvank\\.dbt', 'invocation_command': 'dbt debug', 'log_format': 'default', 'target_path': 'None', 'cache_selected_only': 'False', 'warn_error': 'None', 'indirect_selection': 'eager', 'partial_parse': 'True', 'fail_fast': 'False', 'send_anonymous_usage_stats': 'True', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'log_path': 'logs', 'use_experimental_parser': 'False', 'version_check': 'True', 'introspect': 'True', 'quiet': 'False', 'empty': 'None', 'log_cache_events': 'False', 'debug': 'False', 'no_print': 'None', 'use_colors': 'True', 'printer_width': '80', 'write_json': 'True'}
+[0m17:25:27.323133 [info ] [MainThread]: dbt version: 1.10.15
+[0m17:25:27.323824 [info ] [MainThread]: python version: 3.13.7
+[0m17:25:27.324396 [info ] [MainThread]: python path: C:\Users\yvank\AppData\Local\Programs\Python\Python313\python.exe
+[0m17:25:27.324929 [info ] [MainThread]: os info: Windows-11-10.0.26200-SP0
+[0m17:25:31.047011 [info ] [MainThread]: Using profiles dir at C:\Users\yvank\.dbt
+[0m17:25:31.047745 [info ] [MainThread]: Using profiles.yml file at C:\Users\yvank\.dbt\profiles.yml
+[0m17:25:31.048386 [info ] [MainThread]: Using dbt_project.yml file at C:\Users\yvank\Downloads\DBT_BARCAREALSTATS\dbt_project.yml
+[0m17:25:31.048897 [info ] [MainThread]: adapter type: bigquery
+[0m17:25:31.049405 [info ] [MainThread]: adapter version: 1.10.3
+[0m17:25:31.050001 [info ] [MainThread]: Configuration:
+[0m17:25:31.050562 [info ] [MainThread]:   profiles.yml file [[32mOK found and valid[0m]
+[0m17:25:31.051049 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m17:25:31.051546 [info ] [MainThread]: Required dependencies:
+[0m17:25:31.052040 [debug] [MainThread]: Executing "git --help"
+[0m17:25:31.055905 [info ] [MainThread]:  - git [[31mERROR[0m]
+
+[0m17:25:31.056457 [info ] [MainThread]: Connection:
+[0m17:25:31.056954 [info ] [MainThread]:   method: oauth
+[0m17:25:31.057519 [info ] [MainThread]:   database: barcarealstats
+[0m17:25:31.058011 [info ] [MainThread]:   execution_project: barcarealstats
+[0m17:25:31.058492 [info ] [MainThread]:   schema: football_data_test
+[0m17:25:31.059094 [info ] [MainThread]:   location: US
+[0m17:25:31.059652 [info ] [MainThread]:   priority: interactive
+[0m17:25:31.060184 [info ] [MainThread]:   maximum_bytes_billed: None
+[0m17:25:31.060647 [info ] [MainThread]:   impersonate_service_account: None
+[0m17:25:31.061141 [info ] [MainThread]:   job_retry_deadline_seconds: None
+[0m17:25:31.061578 [info ] [MainThread]:   job_retries: 1
+[0m17:25:31.062202 [info ] [MainThread]:   job_creation_timeout_seconds: None
+[0m17:25:31.063125 [info ] [MainThread]:   job_execution_timeout_seconds: 300
+[0m17:25:31.063828 [info ] [MainThread]:   timeout_seconds: 300
+[0m17:25:31.064632 [info ] [MainThread]:   client_id: None
+[0m17:25:31.065417 [info ] [MainThread]:   token_uri: None
+[0m17:25:31.066141 [info ] [MainThread]:   compute_region: None
+[0m17:25:31.066851 [info ] [MainThread]:   dataproc_cluster_name: None
+[0m17:25:31.067627 [info ] [MainThread]:   gcs_bucket: None
+[0m17:25:31.068426 [info ] [MainThread]:   dataproc_batch: None
+[0m17:25:31.071432 [info ] [MainThread]: Registered adapter: bigquery=1.10.3
+[0m17:25:31.740010 [debug] [MainThread]: Acquiring new bigquery connection 'debug'
+[0m17:25:31.740450 [debug] [MainThread]: On debug: select 1 as id
+[0m17:25:31.740780 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m17:25:39.115133 [debug] [MainThread]: BigQuery adapter: https://console.cloud.google.com/bigquery?project=barcarealstats&j=bq:US:1276c03e-bdd2-4a50-85f4-fd2428d97625&page=queryresults
+[0m17:25:44.957484 [info ] [MainThread]:   Connection test: [[32mOK connection ok[0m]
+
+[0m17:25:44.960298 [info ] [MainThread]: [31m2 checks failed:[0m
+[0m17:25:44.962418 [info ] [MainThread]: Project loading failed for the following reason:
+ project path <C:\Users\yvank\Downloads\DBT_BARCAREALSTATS\dbt_project.yml> not found
+
+[0m17:25:44.964460 [info ] [MainThread]: Error from git --help: Could not find command, ensure it is in the user's PATH and that the user has permissions to run it: "git"
+
+[0m17:25:44.968431 [debug] [MainThread]: Command `dbt debug` failed at 17:25:44.967936 after 17.97 seconds
+[0m17:25:44.969723 [debug] [MainThread]: Connection 'debug' was properly closed.
+[0m17:25:44.970833 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017F3BC5FCE0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017F3BCBAF90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017F3ABD3020>]}
+[0m17:25:44.971953 [debug] [MainThread]: Flushing usage events
+[0m17:25:45.739194 [debug] [MainThread]: An error was encountered while trying to flush usage events
