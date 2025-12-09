@@ -34,7 +34,7 @@ jobs:
       # Build image
       - name: Build Docker image
         run: |
-          docker build -t europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/containers/dbt-job:latest ./DBT_BARCAREALSTATS/dbt_brs
+          docker build -t europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/containers/dbt-job:latest ./DBT_BARCAREALSTATS/
 
       # Push image
       - name: Push Docker image
