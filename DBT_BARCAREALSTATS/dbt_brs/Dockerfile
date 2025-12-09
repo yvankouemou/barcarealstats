@@ -1,7 +1,7 @@
 # DBT image for BigQuery
 FROM python:3.11-slim
 
-# Préparation
+# Préparation de l'environnement
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
