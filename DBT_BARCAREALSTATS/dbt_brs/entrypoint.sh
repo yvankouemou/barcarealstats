@@ -21,7 +21,7 @@ ${DBT_PROFILE_NAME}:
   outputs:
     ${DBT_TARGET}:
       type: bigquery
-      method: service-account
+      method: oauth
       project: ${DBT_PROJECT_ID}
       dataset: ${DBT_DATASET}
       location: ${DBT_LOCATION}
