@@ -1,4 +1,4 @@
 dbt-core==1.6.3
 dbt-bigquery==1.6.3
-google-cloud-secret-manager==2.25.0
+google-cloud-secret-manager==2..2
 requests==2.32.3
