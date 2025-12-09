@@ -1,0 +1,21 @@
+FROM python:3.11-slim
+
+# Set workdir
+WORKDIR /app
+
+# Install system dependencies for dbt-bigquery
+RUN apt-get update && apt-get install -y \
+    git \
+    && apt-get clean
+
+# Install dbt-bigquery
+RUN pip install --no-cache-dir dbt-bigquery
+
+# Copy only dbt project
+COPY . /app
+
+# Profiles location inside container
+ENV DBT_PROFILES_DIR=/app/profiles
+
+# Default command
+CMD ["dbt", "run"]

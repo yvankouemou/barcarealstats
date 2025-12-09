@@ -1,0 +1,61 @@
+name: Deploy DBT Job
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "DBT_BARCAREALSTATS/dbt_brs/"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+          # version: "latest" # optionnel
+
+      - name: Configure Docker to use Artifact Registry
+        run: |
+          gcloud auth configure-docker europe-west9-docker.pkg.dev --quiet
+
+      - name: Build Docker image
+        run: |
+          IMAGE_URI="europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.ARTIFACT_REPOSITORY }}/dbt-job:latest"
+          docker build -t "${IMAGE_URI}" ./DBT_BARCAREALSTATS
+
+      - name: Push image to Artifact Registry
+        run: |
+          IMAGE_URI="europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.ARTIFACT_REPOSITORY }}/dbt-job:latest"
+          docker push "${IMAGE_URI}"
+
+      - name: Deploy Cloud Run Job (create or update)
+        env:
+          IMAGE_URI: "europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.ARTIFACT_REPOSITORY }}/dbt-job:latest"
+        run: |
+          # NOTE: we mount the service-account key secret from Secret Manager at /secrets/sa-key.json
+          # Create a secret in Secret Manager named 'dbt-sa-key' containing the JSON key.
+          # Adapt the secret name below if nécessaire.
+          SECRET_NAME="dbt-sa-key"
+          gcloud run jobs deploy dbt-job \
+            --image "${IMAGE_URI}" \
+            --region europe-west9 \
+            --set-env-vars DBT_PROJECT_ID=${{ secrets.PROJECT_ID }},DBT_DATASET=barcalake,DBT_LOCATION=europe-west9,DBT_CMD="dbt run" \
+            --set-secrets DBT_KEYFILE_PATH=projects/${{ secrets.PROJECT_ID }}/secrets/${SECRET_NAME}:latest \
+            --quiet
+
+      - name: Execute Cloud Run Job
+        run: |
+          gcloud run jobs execute dbt-job --region europe-west9 --project ${{ secrets.PROJECT_ID }} --wait
