@@ -6,7 +6,7 @@ mkdir -p /root/.dbt
 
 # Variables attendues :
 
-DBT_PROJECT_ID="${DBT_PROJECT_ID:-${GOOGLE_CLOUD_PROJECT:-}}"
+DBT_PROJECT_ID="${DBT_PROJECT_ID:-barcarealstats}"
 DBT_DATASET="${DBT_DATASET:-football_data_clean}"
 DBT_LOCATION="${DBT_LOCATION:-europe-west9}"
 DBT_PROFILE_NAME="${DBT_PROFILE_NAME:-dbt_brs}"
