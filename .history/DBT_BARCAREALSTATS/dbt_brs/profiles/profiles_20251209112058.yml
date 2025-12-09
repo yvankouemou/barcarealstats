@@ -1,0 +1,9 @@
+barca_real_stats:
+  target: prod
+  outputs:
+    prod:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('PROJECT_ID') }}"
+      dataset: barcalake
+      location: europe-west9
