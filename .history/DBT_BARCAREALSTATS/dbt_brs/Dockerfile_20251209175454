@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # Copie du projet dbt
 COPY . /app
 
-# Entrypoint qui va générer ~/.dbt/profiles.yml
+# Entrypoint qui va générer ~/.dbt/profiles.ym
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
