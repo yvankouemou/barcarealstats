@@ -1,0 +1,55 @@
+name: Deploy DBT job
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "DBT_BARCAREALSTATS/dbt/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+      uses: actions/checkout@v3
+
+      # Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # Install Google Cloud SDK
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+
+      # Docker login to Artifact Registry
+      - name: Authenticate Docker
+        run: |
+          gcloud auth configure-docker europe-west9-docker.pkg.dev --quiet
+
+      # Build image
+      - name: Build Docker image
+        run: |
+          docker build -t europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/containers/dbt-job:latest ./DBT_BARCAREALSTATS
+
+      # Push image
+      - name: Push Docker image
+        run: |
+          docker push europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/containers/dbt-job:latest
+
+      # Deploy to Cloud Run Job
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run jobs deploy dbt-job \
+            --image europe-west9-docker.pkg.dev/${{ secrets.PROJECT_ID }}/containers/dbt-job:latest \
+            --region europe-west9 \
+            --set-env-vars DBT_PROJECT_ID=${{ secrets.PROJECT_ID }} \
+            --set-env-vars DBT_DATASET=barcalake \
+            --set-env-vars DBT_LOCATION=europe-west9 \
+            --set-env-vars DBT_KEYFILE_PATH=/secrets/sa-key.json \
+            --set-env-vars DBT_CMD="dbt build --project-dir /app" \
+            --quiet
