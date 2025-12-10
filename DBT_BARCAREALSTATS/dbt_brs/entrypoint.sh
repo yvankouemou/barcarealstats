@@ -8,7 +8,7 @@ mkdir -p /root/.dbt
 
 DBT_PROJECT_ID="${DBT_PROJECT_ID:-barcarealstats}"
 DBT_DATASET="${DBT_DATASET:-football_data_test}"
-DBT_LOCATION="${DBT_LOCATION:-europe-west9}"
+DBT_LOCATION="${DBT_LOCATION:-US}"
 DBT_PROFILE_NAME="${DBT_PROFILE_NAME:-dbt_brs}"
 DBT_TARGET="${DBT_TARGET:-prod}"
 DBT_KEYFILE_PATH="${DBT_KEYFILE_PATH:-/secrets/sa-key.json}"
